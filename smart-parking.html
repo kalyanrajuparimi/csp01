@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SmartPark AI – Smart Parking Management System</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--tx:#12211b;--mut:#5b6b63;--pri:#0f9d6b;--acc:#2f6bff;--red:#ef4444;--bd:#e0e8e3;--hero:#0b1f18;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1310;--card:#12201a;--tx:#e8f2ed;--mut:#93a89d;--bd:#1e3128;--hero:#050c09}}
+:root[data-theme="dark"]{--bg:#0a1310;--card:#12201a;--tx:#e8f2ed;--mut:#93a89d;--bd:#1e3128;--hero:#050c09}
+html{scroll-behavior:smooth;scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.logo{font-weight:800;font-size:1.2rem}.logo b{color:var(--pri)}
+nav ul{display:flex;gap:22px;list-style:none;padding:0}
+nav a{font-size:.9rem;color:var(--mut)}nav a:hover{color:var(--pri)}
+#th{background:var(--card);border:1px solid var(--bd);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem}
+@media(max-width:820px){nav ul{display:none}}
+.hero{background:radial-gradient(circle at 80% 20%,#0f9d6b55,transparent 45%),radial-gradient(circle at 10% 90%,#2f6bff44,transparent 40%),var(--hero);color:#fff;padding:70px 5vw 60px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.tag{display:inline-block;padding:5px 14px;border:1px solid #0f9d6b;color:#4ade9f;border-radius:99px;font-size:.8rem;margin-bottom:18px}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;margin-bottom:16px}
+h1 span{background:linear-gradient(90deg,#4ade9f,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#b6cbc1;max-width:540px}
+.btns{display:flex;gap:12px;margin:26px 0;flex-wrap:wrap}
+.btn{padding:12px 24px;border-radius:12px;font-weight:600;border:0;cursor:pointer;font-size:.95rem}
+.b1{background:var(--pri);color:#fff}.b2{background:transparent;color:#fff;border:1px solid #ffffff55}
+.btn:hover{transform:translateY(-2px)}
+.stats{display:flex;gap:28px;flex-wrap:wrap}.stats div{font-size:.8rem;color:#9fb5aa}.stats b{display:block;font-size:1.7rem;color:#fff}
+.lot{background:#0d1a15;border:1px solid #ffffff22;border-radius:20px;padding:18px;box-shadow:0 20px 60px #0008}
+.lh{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:12px;color:#b6cbc1}
+.live{color:#4ade9f}.live:before{content:"";display:inline-block;width:8px;height:8px;background:#4ade9f;border-radius:50%;margin-right:6px;animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.2}}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.slot{aspect-ratio:1/1.25;border-radius:8px;display:grid;place-items:center;font-size:.7rem;border:2px dashed #4ade9f88;color:#4ade9f;transition:.4s;cursor:pointer}
+.slot.occ{background:#ef444433;border:2px solid #ef4444;color:#ef4444}
+.slot.occ:after{content:"🚗";font-size:1.2rem}
+.slot.pick{background:#2f6bff;color:#fff;border:2px solid #93b4ff;animation:p 1s infinite}
+.road{grid-column:1/-1;height:26px;border-radius:6px;background:#1a2a23;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#6b8378;letter-spacing:.3em}
+.lot .btn{width:100%;margin-top:14px}
+section{padding:80px 5vw;max-width:1200px;margin:auto}
+h2{font-size:clamp(1.6rem,3.5vw,2.3rem);margin-bottom:8px}
+.sub{color:var(--mut);margin-bottom:36px;max-width:640px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:24px;transition:.3s}
+.card:hover{transform:translateY(-5px);box-shadow:0 12px 30px #0f9d6b22;border-color:var(--pri)}
+.ic{font-size:1.8rem;margin-bottom:10px}
+.card h3{font-size:1.05rem;margin-bottom:6px}.card p{color:var(--mut);font-size:.92rem}
+.ph{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.step{display:flex;gap:16px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px 20px}
+.step i{font-style:normal;flex:none;width:36px;height:36px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:700}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.info .card b{color:var(--pri)}
+.team{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.av{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--acc));color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:12px}
+.roll{font-size:.78rem;color:var(--mut)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.chip{padding:8px 16px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;font-size:.85rem}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.chart{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:26px;max-width:800px}
+.chart h3{margin-bottom:4px}.chart small{color:var(--mut)}
+.row{display:grid;grid-template-columns:minmax(90px,200px) 1fr 70px;gap:12px;align-items:center;margin-top:14px;font-size:.88rem}
+.bar{height:16px;background:var(--bd);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pri),var(--acc));transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.row span:last-child{text-align:right;color:var(--mut)}
+.hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:26px;max-width:800px}
+.hl div{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;text-align:center;color:var(--mut);font-size:.85rem}
+.hl b{display:block;font-size:2rem;color:var(--pri)}
+.tech{display:flex;flex-wrap:wrap;gap:10px}.tech span{padding:10px 18px;border-radius:12px;background:var(--card);border:1px solid var(--bd);font-weight:600}
+.concl{background:linear-gradient(135deg,#0f9d6b,#2f6bff);color:#fff;border-radius:24px;padding:44px;max-width:1100px}
+.concl ul{padding-left:20px;margin-top:16px;display:grid;gap:10px}
+footer{background:var(--hero);color:#9fb5aa;text-align:center;padding:50px 5vw;margin-top:60px}
+footer h2{color:#fff}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.ph-slot{position:relative;aspect-ratio:4/3;border:2px dashed var(--bd);border-radius:16px;background:var(--card);display:grid;place-items:center;text-align:center;color:var(--mut);font-size:.85rem;overflow:hidden;cursor:pointer;padding:12px}
+.ph-slot:hover{border-color:var(--pri);color:var(--pri)}
+.ph-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph-slot input{display:none}
+.pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.pipe .card{flex:1 1 170px;text-align:center;padding:20px 14px}
+.pipe .ar{align-self:center;color:var(--pri);font-size:1.4rem}
+@media(max-width:700px){.pipe .ar{display:none}}
+.note{margin-top:18px;padding:12px 16px;border-radius:12px;background:var(--card);border:1px solid var(--bd);color:var(--mut);font-size:.85rem;max-width:760px}
+.reveal{opacity:0;transform:translateY(30px);transition:1s}.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<nav><a class="logo" href="#top">Smart<b>Park</b> AI</a>
+<ul><li><a href="#about">About</a></li><li><a href="#goals">Goals</a></li><li><a href="#community">Community</a></li><li><a href="#team">Team</a></li><li><a href="#method">Method</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#how">System</a></li><li><a href="#survey">Survey</a></li><li><a href="#outcomes">Outcomes</a></li></ul>
+<button id="th" aria-label="Toggle theme">🌓</button></nav>
+
+<header class="hero" id="top">
+<div>
+<span class="tag">Community Service Project · Mylavaram</span>
+<h1>AI-Based <span>Smart Parking</span> Management for Public Places</h1>
+<p>A study of parking challenges faced by vehicle owners in Mylavaram, and a proposed system that guides drivers to vacant slots in real time.</p>
+<div class="btns"><a class="btn b1" href="#demo">Try Live Demo</a><a class="btn b2" href="#survey">See Survey Results</a></div>
+<div class="stats"><div><b data-n="16">0</b>Survey responses</div><div><b data-n="81" data-s="%">0</b>Would use it</div><div><b data-n="4">0</b>Public place types</div></div>
+</div>
+<div class="lot" id="demo">
+<div class="lh"><span>🅿️ Live Parking Simulation</span><span class="live"><span id="free">0</span> free</span></div>
+<div class="grid" id="grid"></div>
+<button class="btn b1" id="guide">📍 Guide me to nearest slot</button>
+</div>
+</header>
+
+<section id="about" class="reveal">
+<h2>Introduction</h2><p class="sub">Why parking has become a community-wide problem.</p>
+<div class="cards">
+<div class="card"><div class="ic">🚗</div><h3>Growing Vehicles</h3><p>Rapid growth in vehicles has made parking a major challenge at hospitals, colleges, markets and bus stations.</p></div>
+<div class="card"><div class="ic">⏱️</div><h3>Wasted Time</h3><p>Drivers waste time searching for vacant slots, adding to traffic congestion, fuel wastage and air pollution.</p></div>
+<div class="card"><div class="ic">🤖</div><h3>Our Proposal</h3><p>An AI-Based Smart Parking Management System that guides drivers to available spaces in real time.</p></div>
+</div></section>
+
+<section id="goals" class="reveal">
+<h2>Objectives &amp; Goals</h2><p class="sub">What this project set out to achieve.</p>
+<div class="ph">
+<div class="step"><i>1</i><p>Study existing parking management challenges in public places and their impact on the community.</p></div>
+<div class="step"><i>2</i><p>Analyze public awareness of smart parking technologies and the need for automated parking systems.</p></div>
+<div class="step"><i>3</i><p>Develop an AI-Based Smart Parking Management System that detects available spaces in real time.</p></div>
+<div class="step"><i>4</i><p>Reduce traffic congestion, fuel consumption and time spent searching for parking.</p></div>
+</div></section>
+
+<section id="community" class="reveal">
+<h2>Location, Duration &amp; Beneficiaries</h2><p class="sub">Field work carried out through a community survey and visits to hospitals, colleges, markets and bus stations.</p>
+<div class="info">
+<div class="card"><div class="ic">📍</div><h3>Location</h3><p>Village: <b>Mylavaram</b><br>Mandal: <b>Mylavaram</b><br>District: <b>NTR District</b></p></div>
+<div class="card"><div class="ic">📅</div><h3>Duration</h3><p><b>18-05-2026</b> to <b>27-06-2026</b></p></div>
+<div class="card"><div class="ic">👥</div><h3>Primary Beneficiaries</h3><p>Vehicle owners, commuters and students who struggle to find parking near hospitals, colleges and markets.</p></div>
+<div class="card"><div class="ic">🏪</div><h3>Secondary</h3><p>Shopkeepers and parking attendants affected by disorganized parking and congestion.</p></div>
+<div class="card"><div class="ic">🌱</div><h3>Community Impact</h3><p>Greater awareness of smart parking technology and more efficient use of existing parking spaces.</p></div>
+</div></section>
+
+<section id="team" class="reveal">
+<h2>Team &amp; Responsibilities</h2><p class="sub">Guide: Ms. P. Madhavi (Assistant Professor) · Dept. of Artificial Intelligence &amp; Data Science</p>
+<div class="cards team">
+<div class="card"><div class="av">GN</div><h3>G. Naveen</h3><div class="roll">24761A5489</div><p>Requirement gathering, community survey, report preparation.</p></div>
+<div class="card"><div class="av">PK</div><h3>P. Kalyan Raju</h3><div class="roll">25765A5411</div><p>Field visits, data collection, survey analysis.</p></div>
+<div class="card"><div class="av">KA</div><h3>K. Avinash Reddy</h3><div class="roll">24761A54A2</div><p>Field visits, data collection, survey analysis.</p></div>
+<div class="card"><div class="av">VD</div><h3>V. Dileep Kumar</h3><div class="roll">24761A54C7</div><p>Literature survey, prototype study, community coordination.</p></div>
+<div class="card"><div class="av">KR</div><h3>K. Arun Rithvik</h3><div class="roll">24761A54A1</div><p>Literature survey, prototype study, community coordination.</p></div>
+</div></section>
+
+<section id="method" class="reveal">
+<h2>Methodology</h2><p class="sub">How we carried out the study, from planning to analysis.</p>
+<div class="ph">
+<div class="step"><i>1</i><p><b>Requirement gathering:</b> identified problems and the public places to study in Mylavaram.</p></div>
+<div class="step"><i>2</i><p><b>Survey design:</b> prepared a structured questionnaire (demographics, parking problems, awareness, need for a smart system).</p></div>
+<div class="step"><i>3</i><p><b>Field visits:</b> observed parking conditions first-hand at hospitals, colleges, markets and bus stations.</p></div>
+<div class="step"><i>4</i><p><b>Data collection &amp; analysis:</b> collected 16 responses and analysed them into charts.</p></div>
+<div class="step"><i>5</i><p><b>Literature &amp; prototype study:</b> reviewed existing smart parking approaches to shape our proposal.</p></div>
+</div></section>
+
+<section id="gallery" class="reveal">
+<h2>Field Visit Gallery</h2><p class="sub">Click a box to add your own photo (it previews on this page only). To keep photos permanently, replace each box with an &lt;img src="your-photo.jpg"&gt; tag.</p>
+<div class="gal" id="gal"></div></section>
+
+<section id="how" class="reveal">
+<h2>How the Proposed System Works</h2><p class="sub">Our proposed design, not a finished deployment. The live simulation above only illustrates the idea.</p>
+<div class="pipe">
+<div class="card"><div class="ic">📷</div><h3>Capture</h3><p>Cameras / IoT sensors watch each parking bay.</p></div><div class="ar">➜</div>
+<div class="card"><div class="ic">🧠</div><h3>Detect</h3><p>Computer vision classifies each slot as vacant or occupied.</p></div><div class="ar">➜</div>
+<div class="card"><div class="ic">☁️</div><h3>Update</h3><p>Slot status is stored and refreshed in real time.</p></div><div class="ar">➜</div>
+<div class="card"><div class="ic">📱</div><h3>Guide</h3><p>Drivers see free slots and GPS directions on a mobile app.</p></div>
+</div>
+<div class="note">Survey-backed priorities: real-time slot detection (62.5%), mobile app and GPS navigation were the most requested features.</div>
+</section>
+
+<section id="survey" class="reveal">
+<h2>Survey Results</h2><p class="sub">Community survey of 16 respondents in Mylavaram. Pick a topic to explore.</p>
+<div class="chips" id="chips"></div>
+<div class="chart" id="chart"></div>
+<div class="hl"><div><b>87.5%</b>respondents aged 18–30</div><div><b>81.3%</b>would definitely use a smart system</div><div><b>62.5%</b>want real-time slot detection</div></div>
+</section>
+
+<section id="outcomes" class="reveal">
+<h2>Outcomes &amp; Learning</h2><p class="sub">What we achieved and learned along the way.</p>
+<div class="cards">
+<div class="card"><div class="ic">🔍</div><h3>Challenges Identified</h3><p>Key parking problems affecting vehicle owners and the public in Mylavaram.</p></div>
+<div class="card"><div class="ic">⛽</div><h3>Impact Understood</h3><p>Lack of real-time information leads to congestion and fuel wastage.</p></div>
+<div class="card"><div class="ic">📊</div><h3>First-hand Data</h3><p>Structured community survey and field observations.</p></div>
+<div class="card"><div class="ic">💡</div><h3>Solution Proposed</h3><p>AI system with real-time slot detection and guidance.</p></div>
+<div class="card"><div class="ic">🤝</div><h3>Skills Gained</h3><p>Research, teamwork, communication and community interaction.</p></div>
+<div class="card"><div class="ic">🏙️</div><h3>Practical Insight</h3><p>A smart parking solution must suit local traffic conditions.</p></div>
+</div>
+<h3 style="margin:40px 0 14px">Technologies Applied</h3>
+<div class="tech"><span>🧠 Artificial Intelligence</span><span>👁️ Computer Vision</span><span>📡 IoT Sensors</span><span>🗺️ GPS Navigation</span><span>📱 Mobile App</span></div>
+</section>
+
+<section class="reveal"><div class="concl"><h2>Conclusion</h2>
+<ul><li>Limited availability, time wastage and congestion create significant inconvenience for vehicle users in Mylavaram.</li>
+<li>The study showed strong community interest in a Smart Parking System with real-time availability and guidance.</li>
+<li>With continued development, these findings can guide deployment of an AI-based, community-friendly parking solution.</li></ul></div></section>
+
+<footer><h2>Thank you! 🙏</h2><p>Community Service Project · Dept. of Artificial Intelligence &amp; Data Science<br>Mylavaram, NTR District · 2026</p><p style="margin-top:14px;font-size:.8rem">Website built with AI assistance (Claude by Anthropic); project content and survey data are the team's own.</p></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+// theme
+$('#th').onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()==='#0a1310';r.dataset.theme=d?'light':'dark'};
+// parking simulation
+const g=$('#grid'),slots=[];
+for(let i=0;i<24;i++){if(i==6||i==18){}const s=document.createElement('div');s.className='slot'+(Math.random()<.55?' occ':'');s.dataset.i=i;s.textContent=s.classList.contains('occ')?'':'P'+(i+1);
+s.onclick=()=>{s.classList.remove('pick');s.classList.toggle('occ');upd()};g.appendChild(s);slots.push(s);if(i==11){const r=document.createElement('div');r.className='road';r.textContent='→ ROAD →';g.appendChild(r)}}
+function upd(){slots.forEach((s,i)=>s.textContent=s.classList.contains('occ')?'':'P'+(i+1));$('#free').textContent=slots.filter(s=>!s.classList.contains('occ')).length}
+$('#guide').onclick=()=>{slots.forEach(s=>s.classList.remove('pick'));const f=slots.find(s=>!s.classList.contains('occ'));if(f){f.classList.add('pick');f.textContent='➜ '+f.textContent}else alert('Lot is full!')};
+setInterval(()=>{const s=slots[Math.floor(Math.random()*24)];if(!s.classList.contains('pick')){s.classList.toggle('occ');upd()}},1800);upd();
+// gallery
+['Hospital','College','Market','Bus Station','Survey in progress','Team photo'].forEach(n=>{const l=document.createElement('label');l.className='ph-slot';l.innerHTML=`📸 Add photo:<br>${n}<input type="file" accept="image/*">`;l.querySelector('input').onchange=e=>{const f=e.target.files[0];if(!f)return;const i=document.createElement('img');i.src=URL.createObjectURL(f);i.alt=n;l.appendChild(i)};$('#gal').appendChild(l)});
+// survey data
+const D={
+'Age Group':[['18 – 30',14],['31 – 45',1],['Below 18',1]],
+'Gender':[['Male',12],['Female',4]],
+'Education':[['Graduate & above',8],['Intermediate / Diploma',7],['Secondary (up to 10th)',1]],
+'Problem Frequency':[['Frequently',6],['Occasionally',3],['Rarely',3],['Daily',2],['Never',2]],
+'Problem Locations':[['College / School',5],['Shopping / Market',3],['Bus Station',3],['Hospital',2],['Other',2],['Government Office',1]],
+'Search Time':[['5–10 minutes',8],['Less than 5 min',6],['10–20 minutes',1],['More than 20 min',1]],
+'Awareness':[['Know well',8],['Heard about it',7],['Not aware',1]],
+'Would Use System?':[['Yes, definitely',13],['Maybe',2],['No',1]],
+'Useful Features':[['Real-time slot detection',10],['Mobile application',9],['GPS navigation',8],['Parking reservation',4],['Availability alerts',3],['Digital payment',2],['Vehicle tracking',2]]};
+const ch=$('#chips');
+function show(k){document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.textContent===k));
+const rows=D[k].map(([l,v])=>`<div class="row"><span>${l}</span><div class="bar"><i data-w="${v/16*100}"></i></div><span>${v} (${(v/16*100).toFixed(1)}%)</span></div>`).join('');
+$('#chart').innerHTML=`<h3>${k}</h3><small>16 responses${k=='Useful Features'?' · multiple choice · Mobile app count read from chart (≈9)':''}</small>${rows}`;
+setTimeout(()=>document.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%'),50)}
+Object.keys(D).forEach(k=>{const c=document.createElement('button');c.className='chip';c.textContent=k;c.onclick=()=>show(k);ch.appendChild(c)});show('Would Use System?');
+// reveal + counters
+const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n;let c=0;const t=setInterval(()=>{c+=Math.ceil(n/30);if(c>=n){c=n;clearInterval(t)}el.textContent=c+(el.dataset.s||'')},40)});
+</script>
+</body>
+</html>
